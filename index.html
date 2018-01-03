@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+</head>
+<body>
+  <h1 style="text-align: center">Company Crawler</h1>
+  <h2 style="text-align: center"></h2>
+  <canvas height="275"></canvas>
+  <script>
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+    fetch('crawled.json').then(res => res.json()).then(json => document.querySelector('h2').innerText = Object.keys(json)[0]);
+    fetch('found.json').then(res => res.json())
+    .then(json => {
+      var myBarChart = new Chart(document.querySelector('canvas'), {
+        type: 'horizontalBar',
+        data: {
+          labels: Object.keys(json).filter(key => !['Facebook', 'Google', 'Mobil'].includes(key)).sort((a, b) => json[b] < json[a] ? -1 : 1),
+          datasets: [{
+              label: '',
+              data: Object.keys(json).filter(key => !['Facebook', 'Google', 'Mobil'].includes(key)).map(key => json[key]).sort((a, b) => b < a ? -1 : 1),
+              barThickness: 100,
+              backgroundColor: Object.keys(json).filter(key => !['Facebook', 'Google', 'Mobil'].includes(key)).map(key => getRandomColor())
+          }]
+        },
+        options: {
+          legend: false
+        }
+      });
+    })
+  </script>
+</body>
+</html>
