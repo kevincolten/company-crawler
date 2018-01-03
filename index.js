@@ -16,7 +16,7 @@ const crawler = new Crawler({
           if (!found[company]) found[company] = numFound;
           else found[company] += numFound;
         }
-      })
+      });
       
       $('a[href]:not(.share-icon)').get().forEach(element => {
         if (element.attribs.href.includes(seed)) {
